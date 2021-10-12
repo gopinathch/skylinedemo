@@ -3,19 +3,23 @@ on:
     inputs:
       resourceGroupName:
         description: 'Name of Resource Group to Deploy into.'
-        default: 'DSOH'
+        default: 'Skyline-Basic'
         required: true
       azAksClusterName:
-        description: 'aks-devsecops-basic-1'
-        default: 'aks-devsecops-basic-1'
+        description: 'Your AKS Cluster Name'
+        default: 'aks-skyline-basic'
         required: true
       azK8sNamespace:
         description: 'Name of your K8s Namespace.'
         default: 'web-app'
         required: true
-      azAppName:
-        description: 'Name of app being deployed to AKS.'
+      azWebAppName:
+        description: 'Name of web app being deployed to AKS.'
         default: 'mvcwebapp'
+        required: true
+      azWebAPIName:
+        description: 'Name of web api being deployed to AKS.'
+        default: 'webapi'
         required: true
 name: webapp-deploy-aks
 env:
@@ -23,7 +27,8 @@ env:
   CLUSTER_NAME: ${{ github.event.inputs.azAksClusterName }}
   CLUSTER_RESOURCE_GROUP: ${{ github.event.inputs.resourceGroupName }}
   NAMESPACE: ${{ github.event.inputs.azK8sNamespace }}
-  APP_NAME: ${{ github.event.inputs.azAppName }}
+  WEB_APP_NAME: ${{ github.event.inputs.azWebAppName }}
+  WEB_API_NAME: ${{ github.event.inputs.azWebAPIName }}
 
 jobs:
   build:
@@ -63,5 +68,6 @@ jobs:
         manifests: |
           manifests/mvcwebapp-aks-deploy.yaml
         images: |
-          ${{ secrets.REGISTRY_NAME }}.azurecr.io/${{ env.APP_NAME }}:latest
+          ${{ secrets.REGISTRY_NAME }}.azurecr.io/${{ env.WEB_APP_NAME }}:latest
+          ${{ secrets.REGISTRY_NAME }}.azurecr.io/${{ env.WEB_API_NAME }}:latest
         namespace: ${{ env.NAMESPACE }}

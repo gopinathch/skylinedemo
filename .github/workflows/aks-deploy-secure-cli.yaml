@@ -4,7 +4,7 @@ on:
     inputs:
       resourceGroupName:
         description: 'Name of Resource Group to Deploy into.'
-        default: 'DSOH2'
+        default: 'Skyline-Secure'
         required: true
 name: deploy-aks-secure-cli
 jobs:

@@ -21,7 +21,7 @@ spec:
         "beta.kubernetes.io/os": linux
       containers:
       - name: mvcwebapp
-        image: crdevsecopsbasic14m5or5fwudxyc.azurecr.io/mvcwebapp:latest
+        image: crskylinebasic2f6x4pvsclj5s.azurecr.io/mvcwebapp:latest
         ports:
         - containerPort: 80
         resources:
@@ -64,7 +64,7 @@ spec:
         "beta.kubernetes.io/os": linux
       containers:
       - name: webapi
-        image: crdevsecopsbasic14m5or5fwudxyc.azurecr.io/webapi:latest
+        image: crskylinebasic2f6x4pvsclj5s.azurecr.io/webapi:latest
         ports:
         - containerPort: 80
         resources:
