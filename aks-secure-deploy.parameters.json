@@ -1,0 +1,78 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+      "resourceName": {
+        "value": "skyline-secure"
+      },
+      "kubernetesVersion": {
+        "value": "1.20.9"
+      },
+      "agentVMSize": {
+        "value": "Standard_DS3_v2"
+      },
+      "agentCountMax": {
+        "value": 20
+      },
+      "custom_vnet": {
+        "value": true
+      },
+      "enable_aad": {
+        "value": true
+      },
+      "enableAzureRBAC": {
+        "value": true
+      },
+      "registries_sku": {
+        "value": "Premium"
+      },
+      "serviceEndpoints": {
+        "value": [
+          {
+            "service": "Microsoft.ContainerRegistry"
+          },
+          {
+            "service": "Microsoft.KeyVault"
+          }
+        ]
+      },
+      "omsagent": {
+        "value": true
+      },
+      "retentionInDays": {
+        "value": 30
+      },
+      "networkPolicy": {
+        "value": "calico"
+      },
+      "azurepolicy": {
+        "value": "audit"
+      },
+      "authorizedIPRanges": {
+        "value": [
+          "47.38.193.254"
+        ]
+      },
+      "ingressApplicationGateway": {
+        "value": true
+      },
+      "appGWcount": {
+        "value": 0
+      },
+      "appGWsku": {
+        "value": "WAF_v2"
+      },
+      "appGWmaxCount": {
+        "value": 10
+      },
+      "appgwKVIntegration": {
+        "value": true
+      },
+      "AKVserviceEndpointFW": {
+        "value": "47.38.193.254"
+      },
+      "createKV": {
+        "value": true
+      }
+    }
+  }

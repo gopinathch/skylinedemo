@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "uGiTkIvwvp4aOr9jyTQnLlQhK2UpShebs6vs1Sp/1guIet2qDoSKnVcJqIc6ilGoWQvHcjzb4q6y5Wgu2+CCZg==",
+  "success": true,
+  "projectFilePath": "C:\\src\\github\\shadmsft\\devsecopshack\\MvcWebApp\\MvcWebApp.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\shadph\\.nuget\\packages\\microsoft.visualstudio.azure.containers.tools.targets\\1.11.1\\microsoft.visualstudio.azure.containers.tools.targets.1.11.1.nupkg.sha512"
+  ],
+  "logs": []
+}

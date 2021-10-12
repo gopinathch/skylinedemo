@@ -1,0 +1,85 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mvcwebapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mvcwebapp
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  minReadySeconds: 5
+  template:
+    metadata:
+      labels:
+        app: mvcwebapp
+    spec:
+      nodeSelector:
+        "beta.kubernetes.io/os": linux
+      containers:
+      - name: mvcwebapp
+        image: crdevsecopsbasic14m5or5fwudxyc.azurecr.io/mvcwebapp:latest
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            cpu: 250m
+          limits:
+            cpu: 500m
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mvcwebapp
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+  selector:
+    app: mvcwebapp
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webapi
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: webapi
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  minReadySeconds: 5
+  template:
+    metadata:
+      labels:
+        app: webapi
+    spec:
+      nodeSelector:
+        "beta.kubernetes.io/os": linux
+      containers:
+      - name: webapi
+        image: crdevsecopsbasic14m5or5fwudxyc.azurecr.io/webapi:latest
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            cpu: 250m
+          limits:
+            cpu: 500m
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: webapi
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+  selector:
+    app: webapi
