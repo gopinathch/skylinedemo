@@ -3,15 +3,7 @@ on:
     inputs:
       resourceGroupName:
         description: 'Name of Resource Group to Deploy into.'
-        default: 'DSOH'
-        required: true
-      azAksClusterName:
-        description: 'aks-devsecops-basic-1'
-        default: 'aks-devsecops-basic-1'
-        required: true
-      azK8sNamespace:
-        description: 'Name of your K8s Namespace.'
-        default: 'web-app'
+        default: 'Skyline-Basic'
         required: true
       azWebAppName:
         description: 'Name of app being deployed to AKS.'
@@ -24,9 +16,6 @@ on:
 name: webapp-build-push-acr
 env:
   REGISTRY_NAME: ${{ secrets.REGISTRY_NAME }}
-  CLUSTER_NAME: ${{ github.event.inputs.azAksClusterName }}
-  CLUSTER_RESOURCE_GROUP: ${{ github.event.inputs.resourceGroupName }}
-  NAMESPACE: ${{ github.event.inputs.azK8sNamespace }}
   WEB_APP_NAME: ${{ github.event.inputs.azWebAppName }}
   WEB_API_NAME: ${{ github.event.inputs.azWebAPIName }}
 
