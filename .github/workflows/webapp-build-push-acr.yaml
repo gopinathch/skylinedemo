@@ -1,0 +1,56 @@
+on:
+  workflow_dispatch:
+    inputs:
+      resourceGroupName:
+        description: 'Name of Resource Group to Deploy into.'
+        default: 'DSOH'
+        required: true
+      azAksClusterName:
+        description: 'aks-devsecops-basic-1'
+        default: 'aks-devsecops-basic-1'
+        required: true
+      azK8sNamespace:
+        description: 'Name of your K8s Namespace.'
+        default: 'web-app'
+        required: true
+      azWebAppName:
+        description: 'Name of app being deployed to AKS.'
+        default: 'mvcwebapp'
+        required: true
+      azWebAPIName:
+        description: 'Name of web api being deployed to AKS.'
+        default: 'webapi'
+        required: true
+name: webapp-build-push-acr
+env:
+  REGISTRY_NAME: ${{ secrets.REGISTRY_NAME }}
+  CLUSTER_NAME: ${{ github.event.inputs.azAksClusterName }}
+  CLUSTER_RESOURCE_GROUP: ${{ github.event.inputs.resourceGroupName }}
+  NAMESPACE: ${{ github.event.inputs.azK8sNamespace }}
+  WEB_APP_NAME: ${{ github.event.inputs.azWebAppName }}
+  WEB_API_NAME: ${{ github.event.inputs.azWebAPIName }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@main
+    # Connect to Azure Container Registry (ACR)
+    - uses: azure/docker-login@v1
+      with:
+        login-server: ${{ secrets.REGISTRY_NAME }}.azurecr.io
+        username: ${{ secrets.REGISTRY_USERNAME }}
+        password: ${{ secrets.REGISTRY_PASSWORD }}
+    # Container build and push to a Azure Container Registry (ACR)
+    - run: |
+        cd MvcWebApp
+        pwd
+        ls -l
+        docker build . -t ${{ secrets.REGISTRY_NAME }}.azurecr.io/${{ env.WEB_APP_NAME }}:latest
+        docker push ${{ secrets.REGISTRY_NAME }}.azurecr.io/${{ env.WEB_APP_NAME }}:latest
+
+        cd ../WebAPI
+        pwd
+        ls -l
+        docker build . -t ${{ secrets.REGISTRY_NAME }}.azurecr.io/${{ env.WEB_API_NAME }}:latest
+        docker push ${{ secrets.REGISTRY_NAME }}.azurecr.io/${{ env.WEB_API_NAME }}:latest

@@ -1,0 +1,22 @@
+on:
+  workflow_dispatch:
+    inputs:
+      resourceGroupName:
+        description: 'Name of Resource Group to Deploy into.'
+        default: 'DSOH2'
+        required: true
+name: deploy-aks-basic-arm
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+    - uses: azure/arm-deploy@v1
+      with:
+        subscriptionId: 4cb6ad38-a018-4bb7-b382-c64a6df9cd27
+        resourceGroupName: ${{ github.event.inputs.resourceGroupName }}
+        template:  https://github.com/Azure/Aks-Construction/releases/download/0.1.7-preview/main.json
+        parameters: aks-basic-deploy.parameters.json

@@ -1,0 +1,67 @@
+on:
+  workflow_dispatch:
+    inputs:
+      resourceGroupName:
+        description: 'Name of Resource Group to Deploy into.'
+        default: 'DSOH'
+        required: true
+      azAksClusterName:
+        description: 'aks-devsecops-basic-1'
+        default: 'aks-devsecops-basic-1'
+        required: true
+      azK8sNamespace:
+        description: 'Name of your K8s Namespace.'
+        default: 'web-app'
+        required: true
+      azAppName:
+        description: 'Name of app being deployed to AKS.'
+        default: 'mvcwebapp'
+        required: true
+name: webapp-deploy-aks
+env:
+  REGISTRY_NAME: ${{ secrets.REGISTRY_NAME }}
+  CLUSTER_NAME: ${{ github.event.inputs.azAksClusterName }}
+  CLUSTER_RESOURCE_GROUP: ${{ github.event.inputs.resourceGroupName }}
+  NAMESPACE: ${{ github.event.inputs.azK8sNamespace }}
+  APP_NAME: ${{ github.event.inputs.azAppName }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@main
+
+    # Connect to Azure Container Registry (ACR)
+    - uses: azure/docker-login@v1
+      with:
+        login-server: ${{ secrets.REGISTRY_NAME }}.azurecr.io
+        username: ${{ secrets.REGISTRY_USERNAME }}
+        password: ${{ secrets.REGISTRY_PASSWORD }}
+
+    # Set the target Azure Kubernetes Service (AKS) cluster.
+    - uses: azure/aks-set-context@v1
+      with:
+        creds: '${{ secrets.AZURE_CREDENTIALS }}'
+        cluster-name: ${{ env.CLUSTER_NAME }}
+        resource-group: ${{ env.CLUSTER_RESOURCE_GROUP }}
+
+    # Create namespace if doesn't exist
+    - run: |
+        echo $ {{ env.REGISTRY_NAME }}
+        echo $ {{ env.CLUSTER_NAME }}
+        echo $ {{ env.CLUSTER_RESOURCE_GROUP }}
+        echo $ {{ env.NAMESPACE }}
+        echo $ {{ env.APP_NAME }}
+        pwd
+        ls -l
+
+        kubectl create namespace ${{ env.NAMESPACE }} --dry-run -o json | kubectl apply -f -
+
+    # Deploy app to AKS
+    - uses: azure/k8s-deploy@v1
+      with:
+        manifests: |
+          manifests/mvcwebapp-aks-deploy.yaml
+        images: |
+          ${{ secrets.REGISTRY_NAME }}.azurecr.io/${{ env.APP_NAME }}:latest
+        namespace: ${{ env.NAMESPACE }}
